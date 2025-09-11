@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
-const studentSchema = new mongoose.Schema(
+const collegeSchema = new mongoose.Schema(
   {
-    name: {
+    collegeName: {
       type: String,
       required: true,
     },
@@ -23,24 +23,35 @@ const studentSchema = new mongoose.Schema(
       required: true,
     },
 
-    age: {
-      type: Number,
-      required: true,
-    },
-
-    collegeName: {
+    address: {
       type: String,
       required: true,
     },
 
-    courseName: {
+    pincode: {
       type: String,
       required: true,
     },
 
-    yearOfStudy: {
+    accreditation: {
+      type: String,
+      default: "",
+    },
+
+    establishedYear: {
       type: Number,
       required: true,
+    },
+    
+
+    studentCount: {
+      type: Number,
+      default: 0,
+    },
+
+    collegeWebsite: {
+      type: String,
+      default: "",
     },
 
     password: {
@@ -48,48 +59,12 @@ const studentSchema = new mongoose.Schema(
       required: true,
       minlength: 6,
     },
-
     confirmPassword: {
       type: String,
       required: true,
       minlength: 6,
     },
 
-    role: {
-      type: String,
-      enum: ["student"],
-      default: "student",
-    },
-
-    resumeUrl: {
-      type: String,
-      default: "",
-    },
-
-    profileImage: {
-      url: {
-        type: String,
-        default: "",
-      },
-      public_id: {
-        type: String,
-        default: "",
-      },
-    },
-
-    enrolledProgram: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Program",
-      },
-    ],
-
-    refreshToken: {
-      type: String,
-      default: "",
-    },
-
-    // OTP-related fields
     otp: {
       type: String,
       default: "",
@@ -99,7 +74,6 @@ const studentSchema = new mongoose.Schema(
       type: Date,
     },
 
-    // ✅ New fields
     isEmailVerified: {
       type: Boolean,
       default: false,
@@ -109,9 +83,23 @@ const studentSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    state:{
+type: String,
+required: true,
+    },
+    collegeImage:{
+      url: { type: String },
+      public_id: { type: String },
+    },
+
+    role: {
+      type: String,
+      enum: ["college"],
+      default: "college",
+    },
   },
   { timestamps: true }
 );
 
-const Student = mongoose.model("Student", studentSchema);
-export default Student;
+const College = mongoose.model("College", collegeSchema);
+export default College;

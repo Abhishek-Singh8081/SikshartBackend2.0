@@ -131,4 +131,4 @@ export const getDashboardSummary = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Dashboard summary error" });
   }
-}; 
+};  

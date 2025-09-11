@@ -2,7 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.routes.js";
-import cors from "cors";
+import cors from "cors";  
+import fileUpload from "express-fileupload";
 
 import corsOptions from "./lib/cors.js";
 
@@ -17,18 +18,24 @@ import instructorsRoutes from "./routes/instructors.routes.js";
 import feedbackRoutes from "./routes/feedback.routes.js";
 import domainRoutes from "./routes/domain.routes.js";
 import blogRoutes from "./routes/blog.routes.js";
+import publicRoutes from "./routes/public.routes.js";
 
 const app = express();
 
 dotenv.config();
 app.use(cookieParser());
+app.use(fileUpload({
+  useTempFiles : true,
+  tempFileDir : '/tmp/',
+  createParentPath: true
+}));
 
 app.use(cors(corsOptions));
 // app.use(cors());
 
 app.use(express.json());
 app.use(cookieParser());
-
+app.use("/api/public", publicRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/dashboard", dashboardRoutes);

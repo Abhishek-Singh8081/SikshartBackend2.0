@@ -1,5 +1,5 @@
 import express from 'express';
-import { protectRoute } from '../middlewares/auth.middleware.js';
+import { isAdmin, isCompany, protectRoute } from '../middlewares/auth.middleware.js';
 import Student from '../models/student.model.js';
 import Admin from '../models/admin.model.js';
 import bcrypt from 'bcryptjs';
@@ -9,6 +9,16 @@ import Freelancer from '../models/freelancer.model.js';
 import Company from '../models/company.model.js';
 import Internship from '../models/internship.model.js';
 import Instructor from '../models/instructor.model.js';
+import { createHackathon,getAllHackathons,getHackathonById,updateHackathon,deleteHackathon,addBenefit,deleteBenefit,addPrizePool,deletePrizePool,addLeagueFormat,deleteLeagueFormat } from '../controllers/hackathoncontroller.js';
+import { createHackathonContact,deleteHackathonContact,updateHackathonContact,getAllHackathonContacts } from '../controllers/hackathoncontact.controller.js';
+import { createSpeaker,deleteSpeaker,updateSpeaker } from '../controllers/hackathonspeaker.controller.js';
+import { createInternship,getAllInternships,updateInternship,deleteInternship } from '../controllers/internship.controllers.js';
+import { adminAuth } from '../middlewares/admin.middleware.js';
+import { getAllInternshipRegistrations } from '../controllers/internshipresgistration.controller.js';
+import { createAboutPage,updateAboutPage,addSection,updateSection,toggleSectionVisibility } from '../controllers/hackathonabout.controller.js';
+import { createCard,deleteCard,updateCard } from "../controllers/hackathoncardrbenefit.controller.js"
+// import {protectRoute} from '../middlewares/auth.middleware.js';
+
 
 const router = express.Router();
 
@@ -391,5 +401,53 @@ router.delete('/admins/:id', async (req, res) => {
     res.status(500).json({ message: 'Failed to delete admin' });
   }
 });
+
+
+
+// Hackathon routes
+router.post("/createhackathon",protectRoute,isAdmin, createHackathon);
+
+
+router.patch("/updatehackathon/:id",protectRoute,isAdmin,updateHackathon);
+router.delete("/deletehackathon/:id",protectRoute,isAdmin,deleteHackathon);
+router.post("/addbenefit/:id",protectRoute,isAdmin,addBenefit);
+router.delete("/deletebenefit/:id/:benefitId",protectRoute,isAdmin,deleteBenefit);
+router.post("/addprizepool/:id",protectRoute,isAdmin,addPrizePool);
+router.delete("/deleteprizepool/:id/:prizePoolId",protectRoute,isAdmin,deletePrizePool);
+router.post("/addleagueformat/:id",protectRoute,isAdmin,addLeagueFormat);
+router.delete("/deleteleagueformat/:id/:leagueFormatId",protectRoute,isAdmin,deleteLeagueFormat);
+// router.post("/createinternship",adminAuth, createInternship);
+router.post("/createinternship",protectRoute,isAdmin, createInternship);
+router.put("/updateinternship/:id",protectRoute,isAdmin, updateInternship);
+
+
+router.post("/createhackathoncontact",protectRoute,isAdmin, createHackathonContact);
+router.put("/updatehackathoncontact/:id",protectRoute,isAdmin, updateHackathonContact);
+
+router.delete("/deletehackathoncontact/:id",protectRoute,isAdmin, deleteHackathonContact);
+
+router.post("/createspeaker",protectRoute,isAdmin, createSpeaker);
+router.delete("/deletespeaker/:id",protectRoute,isAdmin, deleteSpeaker);
+router.put("/updatespeaker/:id",protectRoute,isAdmin, updateSpeaker);
+
+router.get("/getallregisrationforinternships",protectRoute,isAdmin,getAllInternshipRegistrations)
+router.post("/createaboutpage",protectRoute,isAdmin,createAboutPage );
+router.put("/updateaboutpage",protectRoute,isAdmin,updateAboutPage );
+router.post("/addsection",protectRoute,isAdmin,addSection );
+router.put("/updatesection/:slug",protectRoute,isAdmin,updateSection );
+router.put("/togglesectionvisibility",protectRoute,isAdmin,toggleSectionVisibility)
+
+
+
+router.post("/createcard",protectRoute,isAdmin, createCard);
+
+// GET - Fetch all cards
+
+
+// DELETE - Delete card by cardNumber
+router.delete("/deletecard/:cardNumber", protectRoute,isAdmin,deleteCard);
+router.put("/updatecard/:cardNumber", protectRoute,isAdmin,updateCard);
+
+
 
 export default router; 

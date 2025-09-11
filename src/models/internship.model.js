@@ -1,5 +1,13 @@
 import mongoose from "mongoose";
 
+const stringWithIdSchema = new mongoose.Schema({
+  id: {
+    type: mongoose.Schema.Types.ObjectId,
+    default: () => new mongoose.Types.ObjectId(),
+  },
+  value: { type: String, required: true },
+}, { _id: false });
+
 const curriculumSchema = new mongoose.Schema({
   week: String,
   topic: String,
@@ -17,16 +25,19 @@ const internshipSchema = new mongoose.Schema({
   hoverGradient: String,
   slug: { type: String, unique: true },
   description: String,
-  targetAudience: [String],
-  stacks: [String],
+
+  targetAudience: [stringWithIdSchema],
+  stacks: [stringWithIdSchema],
+  tools: [stringWithIdSchema],
+  outcomes: [stringWithIdSchema],
+  perks: [stringWithIdSchema],
+  requirements: [stringWithIdSchema],
+
   duration: String,
-  tools: [String],
   priceRange: String,
-  outcomes: [String],
-  perks: [String],
+
   curriculum: [curriculumSchema],
-  requirements: [String],
 }, { timestamps: true });
 
 const Internship = mongoose.model("Internship", internshipSchema);
-export default Internship; 
+export default Internship;

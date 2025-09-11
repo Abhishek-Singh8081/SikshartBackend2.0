@@ -25,6 +25,14 @@ const freelancerSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    isEmailVerified: {
+      type: Boolean,
+      default: false,
+  },
+  isactive: { 
+    type: Boolean, 
+    default: true 
+  },
   },
   { timestamps: true }
 );
