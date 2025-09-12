@@ -41,7 +41,7 @@ const hackathonSchema = new mongoose.Schema(
 
     event_type: {
       type: String,
-      enum: ["hackathon", "ideathon", "techfest"],
+      enum: ["hackathon", "ideathon", "incubation"],
       required: true,
     },
 
@@ -68,16 +68,23 @@ const hackathonSchema = new mongoose.Schema(
       min: 0,
     },
 
+    // ✅ Add location field
+    location: {
+      type: String,
+      required: function () {
+        return this.hackathon_type === 'offline' || this.hackathon_type === 'hybrid';
+      },
+    },
+
     benefits: [benefitSchema],
 
-conducted_by: [
-  {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "College",
-    required: false, // Optional during creation
-  }
-],
-
+    conducted_by: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "College",
+        required: false,
+      }
+    ],
 
     hackathon_dates: {
       start_date: { type: Date, required: true },
@@ -89,6 +96,7 @@ conducted_by: [
   },
   { timestamps: true }
 );
+
 
 const Hackathon = mongoose.model("Hackathon", hackathonSchema);
 export default Hackathon;

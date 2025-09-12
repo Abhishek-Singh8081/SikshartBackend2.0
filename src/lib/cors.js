@@ -1,5 +1,6 @@
 const allowedOrigins = [
   "http://localhost:3000",
+  "http://localhost:5173",
   "http://localhost:3001",
   "https://www.shikshart.com",
   "https://shikshart.com",
@@ -7,8 +8,10 @@ const allowedOrigins = [
   "https://shikshartgamifiedlms.onrender.com",
 ];
 
+
 const corsOptions = {
   origin: function (origin, callback) {
+    console.log("Origin:", origin);
     if (!origin) return callback(null, true);
     if (allowedOrigins.includes(origin)) {
       return callback(null, true);

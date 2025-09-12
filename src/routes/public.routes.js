@@ -12,6 +12,8 @@ import { updateStudent } from '../controllers/studentdashboard.controller.js';
 import { iscollege } from '../middlewares/auth.middleware.js';
 import { getCollegeProfile, getHackathonsByCollege, updateCollegeProfile } from '../controllers/college.controller.js';
 import { getAllCards } from '../controllers/hackathoncardrbenefit.controller.js';
+import { getAllCTAs } from '../controllers/cta.controller.js';
+import { getAllFAQs } from '../controllers/hackathonfaq.controller.js';
 
 const router = express.Router();
 router.get("/getallhackathoncontacts", getAllHackathonContacts);
@@ -30,5 +32,7 @@ router.get("/gethackathonbycollege/:collegeId",protectRoute,iscollege,getHackath
 router.get("/getcollegeprofile/:collegeId",protectRoute,iscollege,getCollegeProfile);
 router.put("/updatecollegeprofile/:collegeId",protectRoute,iscollege,updateCollegeProfile);
 router.get("/getallcards", getAllCards);
+router.get("/getallcalltoactions",getAllCTAs)
+router.get("/getallfaqs",getAllFAQs)
 
 export default router;

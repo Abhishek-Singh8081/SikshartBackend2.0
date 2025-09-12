@@ -1,12 +1,15 @@
-// models/calltoaction.model.js
 import mongoose from "mongoose";
 
 const subtitleSchema = new mongoose.Schema({
   text: {
     type: String,
     required: true
+  },
+  subtext: {
+    type: String,
+    default: "" // Optional, or set required: true if you need it
   }
-}, { _id: true }); // ensure _id is included by default
+}, { _id: true }); // keep subtitle IDs
 
 const callToActionSchema = new mongoose.Schema({
   title: {

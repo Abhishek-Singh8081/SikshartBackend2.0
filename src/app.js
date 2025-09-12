@@ -1,12 +1,12 @@
 import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
-import authRoutes from "./routes/auth.routes.js";
-import cors from "cors";  
+import cors from "cors";
 import fileUpload from "express-fileupload";
 
 import corsOptions from "./lib/cors.js";
 
+import authRoutes from "./routes/auth.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
 import contactRoutes from "./routes/contact.routes.js";
 import citRoutes from "./routes/cit.routes.js";
@@ -23,18 +23,37 @@ import publicRoutes from "./routes/public.routes.js";
 const app = express();
 
 dotenv.config();
-app.use(cookieParser());
-app.use(fileUpload({
-  useTempFiles : true,
-  tempFileDir : '/tmp/',
-  createParentPath: true
-}));
 
+// Parse cookies once
+app.use(cookieParser());
+
+// Enable file uploads with temp directory compatible with Windows
+app.use(
+  fileUpload({
+    useTempFiles: true,
+    tempFileDir: "./tmp/", // relative path; will be created if missing (createParentPath: true)
+    createParentPath: true,
+    parseNested: true, // <-- add this
+  })
+);
+
+// Enable CORS with your config
 app.use(cors(corsOptions));
-// app.use(cors());
 
+// Parse JSON and URL encoded bodies AFTER fileUpload middleware (multipart/form-data reqs are handled by fileUpload)
 app.use(express.json());
-app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
+
+// Logging middleware to see incoming requests (after parsing so req.body and req.files are available)
+app.use((req, res, next) => {
+  console.log("--- Incoming request ---");
+  console.log("Content-Type:", req.headers["content-type"]);
+  console.log("req.body:", req.body);
+  console.log("req.files:", req.files);
+  next();
+});
+
+// Routes
 app.use("/api/public", publicRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/contact", contactRoutes);
@@ -49,6 +68,7 @@ app.use("/api/feedback", feedbackRoutes);
 app.use("/api/domains", domainRoutes);
 app.use("/api/blog", blogRoutes);
 
+// Simple test routes
 app.get("/", (req, res) => {
   console.log("hello");
   res.send("Server is running!");
@@ -62,7 +82,7 @@ app.get("/api/health", (req, res) => {
   res.json({ status: "OK", message: "Server is running" });
 });
 
-// Temporary fallback route for citregistrations until the main route is deployed
+// Temporary fallback route for citregistrations
 app.post("/api/citregistrations-fallback", async (req, res) => {
   try {
     console.log("Fallback route: Received registration request:", req.body);
@@ -74,7 +94,7 @@ app.post("/api/citregistrations-fallback", async (req, res) => {
         .json({ message: "Name, email, phone, and domain are required." });
     }
 
-    // For now, just return success without saving to database
+    // Just return success for now
     res.status(201).json({
       message: "Registration successful (fallback route)",
       userId: "temp-user-id-" + Date.now(),

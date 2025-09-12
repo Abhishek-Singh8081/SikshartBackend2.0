@@ -17,6 +17,9 @@ import { adminAuth } from '../middlewares/admin.middleware.js';
 import { getAllInternshipRegistrations } from '../controllers/internshipresgistration.controller.js';
 import { createAboutPage,updateAboutPage,addSection,updateSection,toggleSectionVisibility } from '../controllers/hackathonabout.controller.js';
 import { createCard,deleteCard,updateCard } from "../controllers/hackathoncardrbenefit.controller.js"
+import { createCTA,updateCTA,deleteCTA } from '../controllers/cta.controller.js';
+import { createFAQ,updateFAQ,deleteFAQ } from '../controllers/hackathonfaq.controller.js';
+
 // import {protectRoute} from '../middlewares/auth.middleware.js';
 
 
@@ -447,6 +450,12 @@ router.post("/createcard",protectRoute,isAdmin, createCard);
 // DELETE - Delete card by cardNumber
 router.delete("/deletecard/:cardNumber", protectRoute,isAdmin,deleteCard);
 router.put("/updatecard/:cardNumber", protectRoute,isAdmin,updateCard);
+router.post("/createcalltoaction",protectRoute,isAdmin,createCTA)
+router.put("/updatecalltoaction/:id",protectRoute,isAdmin,updateCTA)
+router.delete("/deletecalltoaction/:id",protectRoute,isAdmin,deleteCTA)
+router.post("/createfaq",protectRoute,isAdmin,createFAQ)
+router.put("/updatefaq/:id",protectRoute,isAdmin,updateFAQ)
+router.delete("/deletefaq/:id",protectRoute,isAdmin,deleteFAQ)
 
 
 

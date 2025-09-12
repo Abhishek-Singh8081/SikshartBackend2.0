@@ -1,4 +1,3 @@
-// controllers/calltoaction.controller.js
 import CallToAction from "../models/calltoaction.model.js";
 
 // 📥 Create CTA
@@ -70,16 +69,19 @@ export const deleteCTA = async (req, res) => {
   }
 };
 
-
-// Update specific subtitle
+// ✏️ Update specific subtitle
 export const updateSubtitle = async (req, res) => {
   try {
     const { ctaId, subtitleId } = req.params;
-    const { text } = req.body;
+    const { text, subtext } = req.body;
+
+    const updateFields = {};
+    if (text !== undefined) updateFields["subtitles.$.text"] = text;
+    if (subtext !== undefined) updateFields["subtitles.$.subtext"] = subtext;
 
     const cta = await CallToAction.findOneAndUpdate(
       { _id: ctaId, "subtitles._id": subtitleId },
-      { $set: { "subtitles.$.text": text } },
+      { $set: updateFields },
       { new: true }
     );
 
@@ -93,7 +95,7 @@ export const updateSubtitle = async (req, res) => {
   }
 };
 
-// Delete specific subtitle
+// ❌ Delete specific subtitle
 export const deleteSubtitle = async (req, res) => {
   try {
     const { ctaId, subtitleId } = req.params;

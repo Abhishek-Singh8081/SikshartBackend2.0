@@ -10,6 +10,7 @@ export const createCard = async (req, res) => {
     }
 
     const { title, description, benefit } = req.body;
+    console.log(req.body)
 
     // Check for duplicate title (optional – remove this if not needed)
     const existingCard = await Card.findOne({ title });

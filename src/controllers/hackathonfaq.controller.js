@@ -1,5 +1,5 @@
 // controllers/faq.controller.js
-import FAQ from "../models/faq.model.js";
+import FAQ from "../models/hackathonfaq.model.js";
 
 // 📥 Create a new FAQ
 export const createFAQ = async (req, res) => {
