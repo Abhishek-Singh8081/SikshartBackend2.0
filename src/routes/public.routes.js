@@ -1,6 +1,6 @@
 import express from 'express';
 // import User from '../models/user.model.js'; 
-import { getAllHackathonContacts } from '../controllers/hackathoncontact.controller.js';
+// import { getAllHackathonContacts } from '../controllers/hackathoncontact.controller.js';
 import { getAllHackathons } from '../controllers/hackathoncontroller.js';
 import { getAllSpeakers } from '../controllers/hackathonspeaker.controller.js';
 import { getAllInternships, getInternshipById ,getInternshipBySlug} from '../controllers/internship.controllers.js';
@@ -14,9 +14,9 @@ import { getCollegeProfile, getHackathonsByCollege, updateCollegeProfile } from 
 import { getAllCards } from '../controllers/hackathoncardrbenefit.controller.js';
 import { getAllCTAs } from '../controllers/cta.controller.js';
 import { getAllFAQs } from '../controllers/hackathonfaq.controller.js';
-
+import {submitContact,getAllContacts} from "../controllers/hackathoncontact.controller.js"
 const router = express.Router();
-router.get("/getallhackathoncontacts", getAllHackathonContacts);
+// router.get("/getallhackathoncontacts", getAllHackathonContacts);
 router.get("/getallhackathons",getAllHackathons);
 router.get("/getallspeakers",getAllSpeakers);
 router.get("/getallinternships",getAllInternships)
@@ -30,9 +30,13 @@ router.post("/applyforhackathon",protectRoute,isStudentOrFreelancer,createHackat
 router.put("/updatestudent/:id",protectRoute,isStudent,updateStudent);
 router.get("/gethackathonbycollege/:collegeId",protectRoute,iscollege,getHackathonsByCollege);
 router.get("/getcollegeprofile/:collegeId",protectRoute,iscollege,getCollegeProfile);
+
+
 router.put("/updatecollegeprofile/:collegeId",protectRoute,iscollege,updateCollegeProfile);
 router.get("/getallcards", getAllCards);
 router.get("/getallcalltoactions",getAllCTAs)
 router.get("/getallfaqs",getAllFAQs)
+router.post("/createhackathoncontact",submitContact)
+
 
 export default router;

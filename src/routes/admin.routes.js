@@ -10,7 +10,7 @@ import Company from '../models/company.model.js';
 import Internship from '../models/internship.model.js';
 import Instructor from '../models/instructor.model.js';
 import { createHackathon,getAllHackathons,getHackathonById,updateHackathon,deleteHackathon,addBenefit,deleteBenefit,addPrizePool,deletePrizePool,addLeagueFormat,deleteLeagueFormat } from '../controllers/hackathoncontroller.js';
-import { createHackathonContact,deleteHackathonContact,updateHackathonContact,getAllHackathonContacts } from '../controllers/hackathoncontact.controller.js';
+
 import { createSpeaker,deleteSpeaker,updateSpeaker } from '../controllers/hackathonspeaker.controller.js';
 import { createInternship,getAllInternships,updateInternship,deleteInternship } from '../controllers/internship.controllers.js';
 import { adminAuth } from '../middlewares/admin.middleware.js';
@@ -19,6 +19,7 @@ import { createAboutPage,updateAboutPage,addSection,updateSection,toggleSectionV
 import { createCard,deleteCard,updateCard } from "../controllers/hackathoncardrbenefit.controller.js"
 import { createCTA,updateCTA,deleteCTA } from '../controllers/cta.controller.js';
 import { createFAQ,updateFAQ,deleteFAQ } from '../controllers/hackathonfaq.controller.js';
+import { getAllContacts } from '../controllers/hackathoncontact.controller.js';
 
 // import {protectRoute} from '../middlewares/auth.middleware.js';
 
@@ -424,10 +425,6 @@ router.post("/createinternship",protectRoute,isAdmin, createInternship);
 router.put("/updateinternship/:id",protectRoute,isAdmin, updateInternship);
 
 
-router.post("/createhackathoncontact",protectRoute,isAdmin, createHackathonContact);
-router.put("/updatehackathoncontact/:id",protectRoute,isAdmin, updateHackathonContact);
-
-router.delete("/deletehackathoncontact/:id",protectRoute,isAdmin, deleteHackathonContact);
 
 router.post("/createspeaker",protectRoute,isAdmin, createSpeaker);
 router.delete("/deletespeaker/:id",protectRoute,isAdmin, deleteSpeaker);
@@ -456,6 +453,7 @@ router.delete("/deletecalltoaction/:id",protectRoute,isAdmin,deleteCTA)
 router.post("/createfaq",protectRoute,isAdmin,createFAQ)
 router.put("/updatefaq/:id",protectRoute,isAdmin,updateFAQ)
 router.delete("/deletefaq/:id",protectRoute,isAdmin,deleteFAQ)
+router.get("/getallcontacts",getAllContacts)
 
 
 

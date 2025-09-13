@@ -1,51 +1,38 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-const contactChannelSchema = new mongoose.Schema({
-  type: {
-    type: String,
-    enum: ['email', 'phone', 'whatsapp', 'linkedin', 'telegram'],
-    required: true
-  },
-  value: {
-    type: String,
-    required: true
-  }
-}, { _id: false });
-
-const hackathonContactSchema = new mongoose.Schema({
-
-  query_type: {
-    type: String,
-    required: true,
-    enum: [
-      'Media', 'Operations', 'Sponsorship', 'Technical', 
-      'Registration', 'Logistics', 'Other'
-    ]
-  },
-  name: {
-    type: String,
-    required: true
-  },
-  designation: {
-    type: String, 
-    required: true
-  },
- profileImage: {
-      url: {
-        type: String,
-        default: "",
-      },
-      public_id: {
-        type: String,
-        default: "",
-      },
+const contactSchema = new mongoose.Schema(
+  {
+    type: {
+      type: String,
+      enum: ["Partner", "Sponsor", "General Query"],
+      required: true,
     },
-    
-     contact_channels: [contactChannelSchema], 
-}, {
-  timestamps: true
-});
+    // General Fields
+    name: String,
+    email: { type: String, required: true },
+    phone: String,
+    message: String,
 
-const HackathonContact = mongoose.model('HackathonContact', hackathonContactSchema);
+    // General Query Specific
+    subject: String,
 
-export default HackathonContact;
+    // Partner-specific fields
+    fullName: String,
+    jobTitle: String,
+    company: String,
+    companyType: String,
+    country: String,
+    careAbout: String,
+
+    // Sponsor-specific fields
+    organization: String,
+    role: String,
+    sponsorshipType: String,
+    reason: String,
+  },
+  {
+    timestamps: true,
+  }
+);
+
+export default mongoose.model("hackathonContact", contactSchema);

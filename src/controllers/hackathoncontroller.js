@@ -210,6 +210,7 @@ export const updateHackathon = async (req, res) => {
       amount,
       location,
     } = req.body;
+    // console.log(location)
 
     // Poster image update
     if (req.files?.poster_image) {
@@ -254,6 +255,7 @@ export const updateHackathon = async (req, res) => {
       hackathon.location = location;
     }
 
+    
     // Payment handling
     if (typeof is_paid !== 'undefined') {
       const paidBool = is_paid === 'true' || is_paid === true;
