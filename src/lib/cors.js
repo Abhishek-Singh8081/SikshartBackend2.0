@@ -3,7 +3,7 @@ const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:3001",
   "https://www.shikshart.com",
-  "https://hackathon.netlify.app",
+  "https://shiksharthackathon.netlify.app",
   "https://shikshart.com",
   "https://shikshart-gamified-lms.vercel.app",
   "https://shikshartgamifiedlms.onrender.com",
