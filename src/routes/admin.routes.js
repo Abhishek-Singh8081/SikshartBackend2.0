@@ -20,6 +20,7 @@ import { createCard,deleteCard,updateCard } from "../controllers/hackathoncardrb
 import { createCTA,updateCTA,deleteCTA } from '../controllers/cta.controller.js';
 import { createFAQ,updateFAQ,deleteFAQ } from '../controllers/hackathonfaq.controller.js';
 import { getAllContacts } from '../controllers/hackathoncontact.controller.js';
+// import {updateImages,updateVideo} from "../controllers/hackathongallery.controller.js"
 
 // import {protectRoute} from '../middlewares/auth.middleware.js';
 
@@ -454,6 +455,9 @@ router.post("/createfaq",protectRoute,isAdmin,createFAQ)
 router.put("/updatefaq/:id",protectRoute,isAdmin,updateFAQ)
 router.delete("/deletefaq/:id",protectRoute,isAdmin,deleteFAQ)
 router.get("/getallcontacts",getAllContacts)
+
+
+
 
 
 
