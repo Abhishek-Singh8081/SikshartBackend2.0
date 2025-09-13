@@ -16,6 +16,7 @@ import { getAllCTAs } from '../controllers/cta.controller.js';
 import { getAllFAQs } from '../controllers/hackathonfaq.controller.js';
 import {submitContact,getAllContacts} from "../controllers/hackathoncontact.controller.js"
 import {getMedia,uploadSingleImage, uploadSingleVideo} from "../controllers/hackathongallery.controller.js"
+import { getProfile } from '../controllers/auth.controller.js';
 
 const router = express.Router();
 // router.get("/getallhackathoncontacts", getAllHackathonContacts);
@@ -42,6 +43,7 @@ router.post("/createhackathoncontact",submitContact)
 router.get("/getallmedia",getMedia)
 router.post("/uploadimages",uploadSingleImage)
 router.post("/uploadvideo",uploadSingleVideo)
+router.get("/userprofile",protectRoute,getProfile)
 
 
 
