@@ -118,3 +118,18 @@ export const updateCollegeProfile = async (req, res) => {
     res.status(500).json({ message: err.message || "Profile update failed" });
   }
 };
+// ✅ Get all colleges (excluding sensitive data)
+export const getAllColleges = async (req, res) => {
+  try {
+    const colleges = await College.find().select(
+      "-password -confirmPassword -otp -otpExpires"
+    );
+
+    res.status(200).json(colleges);
+  } catch (err) {
+    console.error("Error fetching colleges:", err);
+    res.status(500).json({ message: err.message || "Failed to fetch colleges" });
+  }
+};
+
+

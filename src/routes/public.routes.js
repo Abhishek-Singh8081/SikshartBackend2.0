@@ -10,7 +10,7 @@ import { getHackathonById } from '../controllers/hackathoncontroller.js';
 import { createHackathonRegistration } from '../controllers/hackathonregistration.js';
 import { updateStudent } from '../controllers/studentdashboard.controller.js';
 import { iscollege } from '../middlewares/auth.middleware.js';
-import { getCollegeProfile, getHackathonsByCollege, updateCollegeProfile } from '../controllers/college.controller.js';
+import { getAllColleges, getCollegeProfile, getHackathonsByCollege, updateCollegeProfile } from '../controllers/college.controller.js';
 import { getAllCards } from '../controllers/hackathoncardrbenefit.controller.js';
 import { getAllCTAs } from '../controllers/cta.controller.js';
 import { getAllFAQs } from '../controllers/hackathonfaq.controller.js';
@@ -44,6 +44,7 @@ router.get("/getallmedia",getMedia)
 router.post("/uploadimages",uploadSingleImage)
 router.post("/uploadvideo",uploadSingleVideo)
 router.get("/userprofile",protectRoute,getProfile)
+router.get("/getallcollage",getAllColleges)
 
 
 
