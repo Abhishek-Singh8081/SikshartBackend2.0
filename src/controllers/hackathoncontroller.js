@@ -367,10 +367,11 @@ export const updateHackathon = async (req, res) => {
 export const deleteHackathon = async (req, res) => {
   try {
     const hackathon = await Hackathon.findById(req.params.id);
+    
     if (!hackathon) return res.status(404).json({ message: "Hackathon not found" });
 
     await deleteFromCloudinary(hackathon.poster_image.public_id);
-    await deleteFromCloudinary(hackathon.conducted_by.collage_image.public_id);
+   
 
     await hackathon.deleteOne();
     res.status(200).json({ message: "Hackathon deleted successfully" });
