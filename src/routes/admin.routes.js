@@ -418,7 +418,7 @@ router.delete("/deletehackathon/:id",protectRoute,isAdmin,deleteHackathon);
 router.post("/addbenefit/:id",protectRoute,isAdmin,addBenefit);
 router.delete("/deletebenefit/:id/:benefitId",protectRoute,isAdmin,deleteBenefit);
 router.post("/addprizepool/:id",protectRoute,isAdmin,addPrizePool);
-router.delete("/deleteprizepool/:id/:prizePoolId",protectRoute,isAdmin,deletePrizePool);
+router.delete("/deleteprizepool/:id/:prizeId",protectRoute,isAdmin,deletePrizePool);
 router.post("/addleagueformat/:id",protectRoute,isAdmin,addLeagueFormat);
 router.delete("/deleteleagueformat/:id/:leagueFormatId",protectRoute,isAdmin,deleteLeagueFormat);
 // router.post("/createinternship",adminAuth, createInternship);

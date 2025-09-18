@@ -396,14 +396,31 @@ export const addBenefit = async (req, res) => {
 
 export const deleteBenefit = async (req, res) => {
   try {
-    const { benefitId } = req.params;
-    const hackathon = await Hackathon.findById(req.params.id);
-    hackathon.benefits.id(benefitId).remove();
+    const { id: hackathonId, benefitId } = req.params;
+
+    const hackathon = await Hackathon.findById(hackathonId);
+    if (!hackathon) {
+      return res.status(404).json({ message: "Hackathon not found." });
+    }
+
+    // Check if benefit exists
+    const benefitExists = hackathon.benefits.some(b => b._id.toString() === benefitId);
+    if (!benefitExists) {
+      return res.status(404).json({ message: "Benefit not found." });
+    }
+
+    // Remove the benefit using pull
+    hackathon.benefits.pull({ _id: benefitId });
+
     await hackathon.save();
 
-    res.status(200).json(hackathon);
+    return res.status(200).json({
+      message: "Benefit deleted successfully.",
+      updatedHackathon: hackathon,
+    });
   } catch (error) {
-    res.status(500).json({ message: "Error deleting benefit." });
+    console.error("Error deleting benefit:", error);
+    return res.status(500).json({ message: "Error deleting benefit." });
   }
 };
 
@@ -412,20 +429,40 @@ export const addPrizePool = async (req, res) => {
     const { id } = req.params;
     const { rank, description, amount_inr, amount_usd, teams_selected } = req.body;
 
+    // Validate required fields
     if (!rank || !description || !amount_inr) {
       return res.status(400).json({ message: "Required fields: rank, description, amount_inr" });
     }
 
+    // Fetch hackathon
     const hackathon = await Hackathon.findById(id);
-    if (!hackathon) return res.status(404).json({ message: "Hackathon not found" });
+    if (!hackathon) {
+      return res.status(404).json({ message: "Hackathon not found" });
+    }
 
-    hackathon.prize_pool.push({ rank, description, amount_inr, amount_usd, teams_selected });
+    // Build prize entry object
+    const prizeEntry = {
+      rank,
+      description,
+      amount_inr: Number(amount_inr),
+    };
+
+    // Add optional fields only if provided
+    if (amount_usd !== undefined) prizeEntry.amount_usd = Number(amount_usd);
+    if (teams_selected !== undefined) prizeEntry.teams_selected = Number(teams_selected);
+
+    // Push and save
+    hackathon.prize_pool.push(prizeEntry);
     await hackathon.save();
 
-    res.status(200).json(hackathon);
+    return res.status(200).json({
+      message: "Prize pool entry added successfully",
+      updatedHackathon: hackathon,
+    });
+
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Failed to add prize pool entry" });
+    console.error("Error adding prize pool entry:", error);
+    return res.status(500).json({ message: "Failed to add prize pool entry" });
   }
 };
 
@@ -434,17 +471,27 @@ export const deletePrizePool = async (req, res) => {
     const { id, prizeId } = req.params;
 
     const hackathon = await Hackathon.findById(id);
-    if (!hackathon) return res.status(404).json({ message: "Hackathon not found" });
+    if (!hackathon) {
+      return res.status(404).json({ message: "Hackathon not found" });
+    }
+console.log(prizeId)
+    const exists = hackathon.prize_pool.some(item => item._id.toString() === prizeId);
+    if (!exists) {
+      return res.status(404).json({ message: "Prize entry not found" });
+    }
 
-    const item = hackathon.prize_pool.id(prizeId);
-    if (!item) return res.status(404).json({ message: "Prize entry not found" });
+    // Pull the prize entry from the prize_pool array
+    hackathon.prize_pool.pull({ _id: prizeId });
 
-    item.remove();
     await hackathon.save();
 
-    res.status(200).json(hackathon);
+    return res.status(200).json({
+      message: "Prize entry deleted successfully.",
+      updatedHackathon: hackathon,
+    });
   } catch (error) {
-    res.status(500).json({ message: "Failed to delete prize entry" });
+    console.error("Error deleting prize entry:", error);
+    return res.status(500).json({ message: "Failed to delete prize entry" });
   }
 };
 
@@ -472,23 +519,36 @@ export const addLeagueFormat = async (req, res) => {
 
 export const deleteLeagueFormat = async (req, res) => {
   try {
-    const { id, leagueId } = req.params;
+    const { id, leagueFormatId } = req.params;
 
+    // First: Find the Hackathon
     const hackathon = await Hackathon.findById(id);
-    if (!hackathon) return res.status(404).json({ message: "Hackathon not found" });
+    if (!hackathon) {
+      return res.status(404).json({ message: "Hackathon not found" });
+    }
 
-    const item = hackathon.league_format.id(leagueId);
-    if (!item) return res.status(404).json({ message: "League format entry not found" });
+    // Check if the league_format entry exists
+    const item = hackathon.league_format.id(leagueFormatId);
+    if (!item) {
+      return res.status(404).json({ message: "League format entry not found" });
+    }
 
-    item.remove();
-    await hackathon.save();
+    // If it exists, remove it using $pull
+    const updatedHackathon = await Hackathon.findByIdAndUpdate(
+      id,
+      { $pull: { league_format: { _id: leagueFormatId } } },
+      { new: true }
+    );
 
-    res.status(200).json(hackathon);
+    return res.status(200).json({
+      message: "League format entry deleted successfully",
+      league_format: updatedHackathon.league_format,
+    });
+
   } catch (error) {
-    res.status(500).json({ message: "Failed to delete league format entry" });
+    console.error("Error deleting league format:", error);
+    return res.status(500).json({ message: "Failed to delete league format entry" });
   }
 };
-
-
 
 
