@@ -66,7 +66,7 @@ export const createHackathon = async (req, res) => {
       return res.status(400).json({ message: 'Location is required for offline or hybrid hackathons.' });
     }
 
-    // Validate poster image presence
+    // Validate poster image presence (make it required)
     if (!req.files || !req.files.poster_image) {
       return res.status(400).json({ message: 'Poster image is required.' });
     }
@@ -117,8 +117,8 @@ export const createHackathon = async (req, res) => {
       return res.status(400).json({ message: 'Invalid JSON format for dates, league format, or prize pool.' });
     }
 
-    // Create hackathon document
-    const newHackathon = await Hackathon.create({
+    // Prepare hackathon document object
+    const hackathonData = {
       name,
       event_type,
       description,
@@ -127,16 +127,19 @@ export const createHackathon = async (req, res) => {
       is_paid: is_paid === 'true' || is_paid === true,
       amount_inr: (is_paid === 'true' || is_paid === true) ? Number(amount) : 0,
       location: (hackathon_type === 'offline' || hackathon_type === 'hybrid') ? location : undefined,
-      poster_image: {
-        url: posterUpload.secure_url,
-        public_id: posterUpload.public_id,
-      },
-      benefits: benefitsArr.map(text => ({ text })),
+      benefits: benefitsArr,
       conducted_by: collegeIds,
       hackathon_dates: parsedDates,
       league_format: parsedLeagueFormat,
       prize_pool: parsedPrizePool,
-    });
+      poster_image: {
+        url: posterUpload.secure_url,
+        public_id: posterUpload.public_id,
+      },
+    };
+
+    // Create document
+    const newHackathon = await Hackathon.create(hackathonData);
 
     return res.status(201).json(newHackathon);
   } catch (error) {
@@ -144,6 +147,7 @@ export const createHackathon = async (req, res) => {
     return res.status(500).json({ message: 'Server error during hackathon creation.' });
   }
 };
+
 
 
 
