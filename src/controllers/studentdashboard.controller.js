@@ -19,7 +19,7 @@ const deleteFromCloudinary = async (public_id) => {
 // ✅ Get All Students,
 export const getAllStudents = async (req, res) => {
   try {
-    const students = await Student.find().populate("enrolledProgram");
+    const students = await Student.find().populate("enrolledProgram").select("-password -refreshToken");
     res.status(200).json(students);
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
@@ -38,7 +38,7 @@ export const getStudentById = async (req, res) => {
   }
 };
 
-// ✅ Update Student
+// ✅ Update Student only chaneged by student 
 export const updateStudent = async (req, res) => {
   try {
     const student = await Student.findById(req.params.id);
@@ -91,4 +91,5 @@ export const deleteStudent = async (req, res) => {
     res.status(500).json({ message: "Server error", error });
   }
 };
+
 
